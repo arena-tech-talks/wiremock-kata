@@ -1,0 +1,130 @@
+openapi: 3.0.0
+info:
+  title: Library API
+  description: API zur Verwaltung von Büchern in einer Leihbibliothek
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Lokaler Server
+
+paths:
+  /api/books:
+    get:
+      summary: Alle Bücher abrufen
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    post:
+      summary: Ein neues Buch erstellen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: Buch erfolgreich erstellt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+  /api/books/{id}:
+    get:
+      summary: Ein Buch nach ID abrufen
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Buch nicht gefunden
+    put:
+      summary: Ein Buch aktualisieren
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Buch erfolgreich aktualisiert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Buch nicht gefunden
+    delete:
+      summary: Ein Buch löschen
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Buch erfolgreich gelöscht
+        '404':
+          description: Buch nicht gefunden
+
+  /api/books/search:
+    get:
+      summary: Bücher nach Autor suchen
+      parameters:
+        - name: author
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+        author:
+          type: string
+        isbn:
+          type: string
+      required:
+        - title
+        - author
+        - isbn
