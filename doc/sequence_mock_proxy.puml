@@ -1,0 +1,28 @@
+@startuml
+title Mock as Proxy
+
+participant Client
+participant MockServer
+participant RealServer
+
+note left of MockServer: "... Recording ..."
+activate Client
+Client->MockServer: request
+activate MockServer
+MockServer -> RealServer: request
+activate RealServer
+RealServer --> MockServer: response
+deactivate RealServer
+MockServer -> MockServer: record request and response
+MockServer --> Client: response
+deactivate MockServer
+ deactivate Client
+note left of MockServer: "... Playback ..."
+' activate Client
+Client->MockServer: request
+activate MockServer
+MockServer -> MockServer: recall behaviour
+MockServer --> Client: recorded response
+deactivate MockServer
+
+@enduml

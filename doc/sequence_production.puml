@@ -1,0 +1,8 @@
+@startuml
+
+title Production
+
+Client->Server: request
+Server --> Client: response
+
+@enduml

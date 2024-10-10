@@ -1,0 +1,23 @@
+@startuml
+title Mock in Unittest
+
+participant UnitTest
+participant Client
+participant Mock
+
+
+activate UnitTest
+UnitTest -> Mock: setupStubBehaviour(requestMatching, responseBehaviour)
+UnitTest -> Client: setUrl(mockAddress)
+UnitTest -> Client: call(test_input)
+activate Client
+Client->Mock: request(params)
+activate Mock
+Mock -> Mock: select responseBehaviour for request and params (and state)
+Mock --> Client: response
+deactivate Mock
+Client --> UnitTest: modified response
+deactivate Client
+UnitTest -> UnitTest: verify response
+
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+title Mocked
+
+Client->MockServer: request
+MockServer --> Client: response
+
+@enduml
