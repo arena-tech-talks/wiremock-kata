@@ -21,7 +21,7 @@ Simple REST API to understand easily: [openapi.yaml](openapi.yaml)
 
 Features:
 - simple CRUD app
-- real backend uses file based database to store data (see [book-server](/book-server))
+- real backend uses file based database to store data (see [book-server](book-server))
 - GET, POST
 - Json Format
 - Path Parameters
@@ -29,12 +29,17 @@ Features:
 ## Commands
 
 Run the unit tests using maven:
+```shell
+./mvnw -f book-client/pom.xml test
 
-        ./mvnw -f book-client/pom.xml test
+optional:
+
+./mvnw -f book-client/pom.xml test -Dmaven.compiler.source=21
+```
 
 Start the sample server:
-
-        ./mvnw -f book-server spring-boot:run
-
+```shell
+./mvnw -f book-server spring-boot:run
+```
 In Intellij you can also try out the API from the OpenAPI Spec against the sample server on localhost. 
  
