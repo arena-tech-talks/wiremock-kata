@@ -1,5 +1,8 @@
 # wiremock-kata
 
+![missing](doc/WiremockKata.png)
+
+
 [Kata](https://www.kata.de/allgemein/was-ist-eine-kata/) for using Wiremock in Unit Tests to test REST API clients independently.
 
 - [Wiremock Homepage](https://wiremock.org/)
