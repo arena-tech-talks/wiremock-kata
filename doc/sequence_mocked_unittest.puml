@@ -19,5 +19,6 @@ deactivate Mock
 Client --> UnitTest: modified response
 deactivate Client
 UnitTest -> UnitTest: verify response
+UnitTest -> Mock: verify request
 
 @enduml
