@@ -34,9 +34,9 @@ Features:
 Run the unit tests using maven:
 ```shell
 ./mvnw -f book-client/pom.xml test
-
+```
 optional:
-
+```shell
 ./mvnw -f book-client/pom.xml test -Dmaven.compiler.source=21
 ```
 
