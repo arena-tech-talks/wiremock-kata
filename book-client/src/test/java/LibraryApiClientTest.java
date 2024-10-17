@@ -29,7 +29,7 @@ public class LibraryApiClientTest {
                 Book.builder().isbn("345435435").author("Hubert Meier").title("Was auch immer.").build(),
                 Book.builder().isbn("786778676").author("Dagmar Huber").title("Testen für Anfänger.").build()
         );
-        stubFor(get("/").willReturn(jsonResponse(givenResult, HttpStatus.SC_OK)));
+        stubFor(get("/api/books").willReturn(jsonResponse(givenResult, HttpStatus.SC_OK)));
         LibraryApiClient client = new LibraryApiClient(wmRuntimeInfo.getHttpBaseUrl());
 
         // when
@@ -46,7 +46,7 @@ public class LibraryApiClientTest {
     public void testGetAllBooks_emptyList(WireMockRuntimeInfo wmRuntimeInfo) throws Exception {
         // given
         List<Book> givenResult = Collections.emptyList();
-        stubFor(get("/").willReturn(jsonResponse(givenResult, HttpStatus.SC_OK)));
+        stubFor(get("/api/books").willReturn(jsonResponse(givenResult, HttpStatus.SC_OK)));
         LibraryApiClient client = new LibraryApiClient(wmRuntimeInfo.getHttpBaseUrl());
 
         // when
@@ -64,14 +64,14 @@ public class LibraryApiClientTest {
     public void testGetAllBooks_500(WireMockRuntimeInfo wmRuntimeInfo) throws Exception {
         // given
         final String httpBaseUrl = wmRuntimeInfo.getHttpBaseUrl();
-        stubFor(get("/").willReturn(aResponse().withBody("Internal server error.").withStatus(500)));
+        stubFor(get("/api/books").willReturn(aResponse().withBody("Internal server error.").withStatus(500)));
         LibraryApiClient client = new LibraryApiClient(httpBaseUrl);
 
         // when
         LibraryApiException thrown = Assertions.assertThrows(LibraryApiException.class, () -> client.getAllBooks());
 
         // then
-        Assertions.assertEquals("Http request to %s failed with status code 500".formatted(httpBaseUrl), thrown.getMessage());
+        Assertions.assertEquals("Http request to %s/api/books failed with status code 500".formatted(httpBaseUrl), thrown.getMessage());
     }
 
 
@@ -88,17 +88,17 @@ public class LibraryApiClientTest {
         );
 
         final String httpBaseUrl = wmRuntimeInfo.getHttpBaseUrl();
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(Scenario.STARTED)
                 .willReturn(aResponse().withBody("Temporary server error.").withStatus(503))
                 .willSetStateTo(AFTER_FIRST_FAILURE));
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(AFTER_FIRST_FAILURE)
                 .willReturn(aResponse().withBody("Temporary server error.").withStatus(503))
                 .willSetStateTo(AFTER_SECOND_FAILURE));
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(AFTER_SECOND_FAILURE)
                 .willReturn(jsonResponse(givenResult, HttpStatus.SC_OK)));
@@ -107,10 +107,10 @@ public class LibraryApiClientTest {
         final LibraryApiClient client = new LibraryApiClient(httpBaseUrl);
         // first try:
         LibraryApiException thrown = Assertions.assertThrows(LibraryApiException.class, () -> client.getAllBooks());
-        Assertions.assertEquals("Http request to %s failed with status code 503".formatted(httpBaseUrl), thrown.getMessage());
+        Assertions.assertEquals("Http request to %s/api/books failed with status code 503".formatted(httpBaseUrl), thrown.getMessage());
         // second try:
         LibraryApiException thrown2 = Assertions.assertThrows(LibraryApiException.class, () -> client.getAllBooks());
-        Assertions.assertEquals("Http request to %s failed with status code 503".formatted(httpBaseUrl), thrown2.getMessage());
+        Assertions.assertEquals("Http request to %s/api/books failed with status code 503".formatted(httpBaseUrl), thrown2.getMessage());
         // successful try:
         List<Book> result = client.getAllBooks();
 
@@ -132,17 +132,17 @@ public class LibraryApiClientTest {
         );
 
         final String httpBaseUrl = wmRuntimeInfo.getHttpBaseUrl();
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(Scenario.STARTED)
                 .willReturn(aResponse().withBody("Temporary server error.").withStatus(503))
                 .willSetStateTo(AFTER_FIRST_FAILURE));
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(AFTER_FIRST_FAILURE)
                 .willReturn(aResponse().withBody("Temporary server error.").withStatus(503))
                 .willSetStateTo(AFTER_SECOND_FAILURE));
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(AFTER_SECOND_FAILURE)
                 .willReturn(jsonResponse(givenResult, HttpStatus.SC_OK)));
@@ -169,17 +169,17 @@ public class LibraryApiClientTest {
         );
 
         final String httpBaseUrl = wmRuntimeInfo.getHttpBaseUrl();
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(Scenario.STARTED)
                 .willReturn(aResponse().withBody("Temporary server error.").withStatus(503))
                 .willSetStateTo(AFTER_FIRST_FAILURE));
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(AFTER_FIRST_FAILURE)
                 .willReturn(aResponse().withBody("Temporary server error.").withStatus(503))
                 .willSetStateTo(AFTER_SECOND_FAILURE));
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(AFTER_SECOND_FAILURE)
                 .willReturn(aResponse().withStatus(500)));
@@ -189,7 +189,7 @@ public class LibraryApiClientTest {
         LibraryApiException thrown = Assertions.assertThrows(LibraryApiException.class, () -> client.getAllBooks_withRetries(3));
 
         // then
-        Assertions.assertEquals("Http request to %s failed with status code 500".formatted(httpBaseUrl), thrown.getMessage());
+        Assertions.assertEquals("Http request to %s/api/books failed with status code 500".formatted(httpBaseUrl), thrown.getMessage());
     }
 
 
@@ -208,17 +208,17 @@ public class LibraryApiClientTest {
         );
 
         final String httpBaseUrl = wmRuntimeInfo.getHttpBaseUrl();
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(Scenario.STARTED)
                 .willReturn(aResponse().withBody("Temporary server error.").withStatus(503))
                 .willSetStateTo(AFTER_FIRST_FAILURE));
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(AFTER_FIRST_FAILURE)
                 .willReturn(aResponse().withBody("Temporary server error.").withStatus(503))
                 .willSetStateTo(AFTER_SECOND_FAILURE));
-        stubFor(get("/")
+        stubFor(get("/api/books")
                 .inScenario(wmScenario)
                 .whenScenarioStateIs(AFTER_SECOND_FAILURE)
                 .willReturn(jsonResponse(givenResult, HttpStatus.SC_OK)));
@@ -228,6 +228,6 @@ public class LibraryApiClientTest {
         LibraryApiException thrown = Assertions.assertThrows(LibraryApiException.class, () -> client.getAllBooks_withRetries(2));
 
         // then
-        Assertions.assertEquals("Http request to %s failed with status code 503".formatted(httpBaseUrl), thrown.getMessage());
+        Assertions.assertEquals("Http request to %s/api/books failed with status code 503".formatted(httpBaseUrl), thrown.getMessage());
     }
 }

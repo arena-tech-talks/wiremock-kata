@@ -28,9 +28,13 @@ public class LibraryApiClient {
         this.objectMapper = new ObjectMapper();
     }
 
+    public String getBooksUrl() {
+        return baseUrl + "/api/books";
+    }
+
     public List<Book> getAllBooks() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl))
+                .uri(new URI(getBooksUrl()))
                 .timeout(Duration.ofSeconds(3))
                 .GET()
                 .build();
@@ -46,7 +50,7 @@ public class LibraryApiClient {
 
     public List<Book> getAllBooks_withRetries(int tries) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl))
+                .uri(new URI(getBooksUrl()))
                 .timeout(Duration.ofSeconds(3))
                 .GET()
                 .build();
@@ -77,7 +81,7 @@ public class LibraryApiClient {
 
     public Optional<Book> getBookById(long id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/" + id))
+                .uri(new URI(getBooksUrl() + "/" + id))
                 .GET()
                 .build();
 
@@ -92,7 +96,7 @@ public class LibraryApiClient {
         String requestBody = objectMapper.writeValueAsString(book);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl))
+                .uri(new URI(getBooksUrl()))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
@@ -105,7 +109,7 @@ public class LibraryApiClient {
         String requestBody = objectMapper.writeValueAsString(book);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/" + id))
+                .uri(new URI(getBooksUrl() + "/" + id))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
@@ -116,7 +120,7 @@ public class LibraryApiClient {
 
     public void deleteBook(long id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/" + id))
+                .uri(new URI(getBooksUrl() + "/" + id))
                 .DELETE()
                 .build();
 
@@ -125,7 +129,7 @@ public class LibraryApiClient {
 
     public List<Book> searchBooksByAuthor(String author) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(baseUrl + "/search?author=" + URLEncoder.encode(author, "UTF-8")))
+                .uri(new URI(getBooksUrl() + "/search?author=" + URLEncoder.encode(author, "UTF-8")))
                 .GET()
                 .build();
 
